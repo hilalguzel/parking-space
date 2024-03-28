@@ -1,27 +1,26 @@
-Bu kod, park yerlerinin sayısını eşzamanlı olarak
-kontrol etmek için paralel işlemleri kullanıyor.
+This code utilizes parallel processing to simultaneously 
+check the number of parking spaces.
 
-Özellikle, ThreadPoolExecutor kullanarak her bir park
-yeri pozisyonunu aynı anda kontrol etmeye çalışıyor.
+Specifically, it employs ThreadPoolExecutor to attempt to concurrently 
+check each parking space position..
 
-# Boş park yerlerini kontrol etmek için paralel fonksiyon
+
+# Function for parallel checking of empty parking spaces
 def check_parking_space_parallel(img_processed):
     space_counter = 0
 
     with ThreadPoolExecutor() as executor:
-        # Paralel olarak park yerlerini kontrol et
+        # Check parking spaces in parallel
         futures = [executor.submit(check_parking_space_single, img_processed, pos) for pos in posList]
-        # Toplam boş park yerlerini say
+        # Count total empty parking spaces
         for future in futures:
             count = future.result()
             if count is not None and count < 950:
                 space_counter += 1
 
-    # Boş park yerlerinin sayısını ekrana yazdır
+    # Display the count of empty parking spaces on the screen
     cvzone.putTextRect(img, f'Free {space_counter}/ {len(posList)}', (100, 50), scale=3,
                        thickness=5, offset=20, colorR=(0, 200, 0))
 
-Bu kod parçası, ThreadPoolExecutor kullanarak check_parking_space_single fonksiyonunu
-her bir park yeri pozisyonu için aynı anda çağırır. Bu sayede, her bir park yeri
-bağımsız olarak kontrol edilir ve işlemler eşzamanlı olarak gerçekleşir.
-
+This code segment invokes the check_parking_space_single function for each parking space position simultaneously using 
+ThreadPoolExecutor. Consequently, each parking space is independently checked, and the processes occur concurrently.
