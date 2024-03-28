@@ -1,40 +1,38 @@
 import cv2
 import pickle
 
-#img = cv2.imread('carParkImg.png')
-
-#Araba park yerlerinin koordinatlarını tutmak için liste
+# List to hold the coordinates of car parking spots
 width, height = 107, 48
 
 try:
-    # Daha önce kaydedilmiş park yerleri yükle
+    # Load previously saved parking spots
     with open('CarParkPosition', 'rb') as f:
         posList = pickle.load(f)
 except:
     posList = []
 
-# Fareye tıklanıp tıklanmadığını belirlemek için fonksiyon
+# Function to determine if the mouse is clicked
 def mouseClick(events, x, y, flags, params):
     if events == cv2.EVENT_LBUTTONDOWN:
-        # Yeni bir park yeri ekleyin
+        # Add a new parking spot
         posList.append((x, y))
     if events == cv2.EVENT_RBUTTONDOWN:
         for i, pos in enumerate(posList):
             x1, y1 = pos
-            # Fare bırakıldığında park yeri çizgisinin üzerindeyse, o park yeri silinir
+            # If the mouse is released and it's on top of a parking spot line, remove that parking spot
             if x1< x< x1 + width and y1 < y < y1 + height:
                 posList.pop(i)
 
-    # Güncellenmiş park yerleri dosyaya kaydet
+    # Save the updated parking spots to a file
     with open('CarParkPosition', 'wb') as f:
         pickle.dump(posList, f)
 
-# Ana döngü
+# Main loop
 while True:
-    # Görüntüyü oku
+    # Read the image
     img = cv2.imread('carParkImg.png')
 
-    # Kaydedilmiş park yerlerini çiz
+    # Draw the saved parking spots
     for pos in posList:
         cv2.rectangle(img, pos, (pos[0] + width, pos[1] + height), (255, 0, 255), 2)
 
