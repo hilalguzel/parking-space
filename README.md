@@ -8,3 +8,7 @@ This project uses Image Processing to detect empty and occupied parking spaces a
 <p></p>
 
 <p>In this project, the cvzone library was used to write text on the video.</p>
+
+<p>Before starting the project, if you are using the pycarm editor, you should add the following tools: </p>
+
+
